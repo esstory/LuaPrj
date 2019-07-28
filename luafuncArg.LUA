@@ -1,8 +1,13 @@
+-- 목적: 루아 함수 call by value, call by reference 확인
+-- call by value :  nil, booleans, numbers , strings
+-- call by ref : table, function, thread, userdata
 
+-- print 의 결과는 --> 로 표시
 function dumpTable(o)
     if type(o) == 'table' then
         local s = '{ '
         for k,v in pairs(o) do
+            -- key 가 숫자가 아닌 경우 "key" 
             if type(k) ~= 'number' then 
                 k = '"'..k..'"' 
             end
@@ -19,7 +24,7 @@ print('-------------------------')
 print('table 을 새로 만들어 리턴')
 print('-------------------------')
 
--- table 을 만들어 리턴해 보자 
+-- 함수에서 만든 table 리턴
 function testfunc()
     local var = {}
     var.x = 100
@@ -30,70 +35,32 @@ function testfunc()
     return var
 end
 
-
 local tempTable = testfunc()
-local tablevalue = dumpTable(tempTable)
-print(tablevalue)
+print(dumpTable(tempTable))
+--> { ["y"] = 200,["z"] = { ["a"] = aaa,} ,["x"] = 100,} 
+
 
 print('-------------------------')
-print('nil, boolean, number, string 은 call by value 로 처리된다.')
+print('arg 로 bool, 문자, 숫자, 테이블, nil 을 전달해서 바뀌는 지 확인 ')
 print('-------------------------')
 
-
-function stringTest(arg)
-    arg = 'newabc'
-    print('arg:'..arg)
+function funcTestCallBy(bValue, sString, nValue, tableValue, nilValue)
+   bValue = true
+   sString = '새로운 문자'
+   nValue = 100
+   tableValue.z = 200
+   tableValue.x = 10
+   nilValue = {}
 end
 
-local sTest = "abc"
-print('sTest:'..sTest)
-stringTest(sTest)
+local bValue = false
+local sString = '문자열' 
+local nValue = 10 
+local tableValue = {z = 10}
+local nilValue = nil
 
-print('문자열은 call by value 라 변하지 않는다')
-print('sTest:'..sTest)
-
-print('-------------------------')
-print('함수 인자로 테이블을 넘기면 call by ref 라 넘긴 변수를 수정하면 같이 변경된다')
-print('-------------------------')
-
--- 
--- Tables, functions, threads, and (full) userdata values are objects: variables do not actually contain these values, only references to them. Assignment, parameter passing, and function returns always manipulate references to such values; these operations do not imply any kind of copy.
-function tableTest(arg)
-    print('인자 type:'..type(arg))
-    if arg == nil then
-        arg = {}
-    end
-    
-    arg.x = 'new X'
-    print('arg.x:'..arg.x)
-end
-
-local tempTable2 = {}
-tempTable2.x = 'X'
-print('tempTable2.x:'..tempTable2.x)
-tableTest(tempTable2)
-print('테이블을 함수 인자로 넘기면 call by ref 로 작동한다.')
-print('tempTable2.x:'..tempTable2.x)
-
-
-print('-------------------------')
-print('테이블 내에 변수로 nil, table 을 넣고 각각 함수 인자로 넘겨도 같은 rule 로 작동한다.')
-print('-------------------------')
-
--- 테이블 안에 테이블
-dim1 = {}
-dim2 = nil
-
-dims = {x = dim1, y = dim2}
-print('dims.x:'..dumpTable(dims.x))
-print(dims.y)
-
-tableTest(dims.x)
-tableTest(dims.y)
-
-print('dims.x:'..dumpTable(dims.x))
-print('dim1:'..dumpTable(dim1))
-print(dims.y)
-
-
-
+funcTestCallBy(bValue, sString, nValue, tableValue, nilValue)
+local sOutput = string.format('bValue = %s, sString = %s, nValue = %d, table = %s, nilValue = %s',
+    tostring(bValue), sString, nValue, dumpTable(tableValue), nilValue)
+print(sOutput)
+--> bValue = false, sString = 문자열, nValue = 10, table = { ["z"] = 200,["x"] = 10,} , nilValue = nil
