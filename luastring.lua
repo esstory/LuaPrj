@@ -1,5 +1,16 @@
 -- 목적: 루아 문자열 예제
 
+local sEng = 'abc'
+local sKor = '가나다'
+
+print('--------------------------------------------------------------------')
+print('문자열 길이 - strin.len)
+print('--------------------------------------------------------------------')
+local nLen1  = string.len(sEng)
+local nLen2  = string.len(sKor)
+print('문자열 길이', nLen1, nLen2)
+--  [Outpt] 문자열 길이	3	9
+
 local sText = '   *# They said: "Of course." and you said "Thank you" #*   '
 print('원문:', sText)
 -- [Outpt] 원문:    *# They said: "Of course." and you said "Thank you" #*
