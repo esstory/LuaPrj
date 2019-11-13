@@ -2,7 +2,7 @@
 -- http://lua-users.org/wiki/MathLibraryTutorial
 
 -- print 의 결과는 --> 로 표시
-function dumpTable(o)
+local function dumpTable(o)
     if type(o) == 'table' then
         local s = '{ '
         for k,v in pairs(o) do
@@ -24,7 +24,7 @@ local number1 = 1.3
 print(number1)
 
 
-function testNumber(dValue)
+local function testNumber(dValue)
     -- math.floor - x 보다 작은 최대 정수를 리턴
     local nNum1 = math.floor( dValue )
     print(dValue, '보다 작은 최대 정수', nNum1)
